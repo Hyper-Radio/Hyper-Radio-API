@@ -19,6 +19,7 @@ namespace Hyper_Radio_API.Models
         [Required]
         public string TrackURL { get; set; }
         public string? ImageURL { get; set; }
+        
         [Required]
         public int CreatorId_FK { get; set; }
         public Creator Creator { get; set; }
