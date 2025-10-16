@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Hyper-Radio-API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ce35c750c80bb79e1d6f419e061153e75ab6340c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1ea73abc50873afa1224925d27940973fdcf012d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Hyper-Radio-API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Hyper-Radio-API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
