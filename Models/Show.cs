@@ -10,6 +10,9 @@ public class Show
     public string Name { get; set; }
     [Required]
     public DateTime ScheduledStart { get; set; }
+    
     [Required]
-    public List<ShowTrack> Tracks { get; set; } = new();
+    public ICollection<ShowTrack> ShowTracks { get; set; }
+
+    
 }

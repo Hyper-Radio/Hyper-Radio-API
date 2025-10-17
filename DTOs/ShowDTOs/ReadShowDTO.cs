@@ -7,5 +7,5 @@ public class ReadShowDTO
     public int Id { get; set; }
     public string Name { get; set; }
     public DateTime ScheduledStart { get; set; }
-    public List<ShowTrack> Tracks { get; set; } = new();
+    public ICollection<ShowTrack> ShowTracks { get; set; }
 }

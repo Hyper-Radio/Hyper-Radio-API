@@ -23,5 +23,7 @@ namespace Hyper_Radio_API.Models
         [Required]
         public int CreatorId_FK { get; set; }
         public Creator Creator { get; set; }
+        
+        public ICollection<ShowTrack> ShowTracks { get; set; }
     }
 }

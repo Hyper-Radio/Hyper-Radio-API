@@ -23,7 +23,7 @@ public class ShowService : IShowService
             Id = s.Id,
             Name = s.Name,
             ScheduledStart = s.ScheduledStart,
-            Tracks = s.Tracks
+            ShowTracks = s.ShowTracks
         }).ToList();
 
         return showsDTO;
@@ -42,7 +42,7 @@ public class ShowService : IShowService
         {
             Name = show.Name,
             ScheduledStart = show.ScheduledStart,
-            Tracks = show.Tracks
+            ShowTracks = show.ShowTracks
         };
         
         return showDTO;
@@ -54,7 +54,7 @@ public class ShowService : IShowService
         {
             Name = showDTO.Name,
             ScheduledStart = showDTO.ScheduledStart,
-            Tracks = showDTO.Tracks
+            ShowTracks = showDTO.ShowTracks
         };
 
         var newShowId = await _context.CreateShowAsync(show);
