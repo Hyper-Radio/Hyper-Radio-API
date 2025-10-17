@@ -9,6 +9,6 @@ namespace Hyper_Radio_API.Repositories.Interfaces
         void CreateTrack(Track track);
         void UpdateTrack(Track track);
         void DeleteTrack(Track track);
-        Task<int> SaveChangesAsync();
+        Task<bool> SaveChangesAsync();
     }
 }
