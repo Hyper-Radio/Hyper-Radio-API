@@ -26,7 +26,7 @@ namespace Hyper_Radio_API.Repositories
         {
             _context.Tracks.Add(track);
         }
-        public void UpdateTrack( Track track)
+        public void UpdateTrack(Track track)
         {
              _context.Tracks.Update(track);
         }
@@ -35,9 +35,9 @@ namespace Hyper_Radio_API.Repositories
         {
             _context.Remove(track);
         }
-        public async Task<int> SaveChangesAsync()
+        public async Task<bool> SaveChangesAsync()
         {
-            return await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
