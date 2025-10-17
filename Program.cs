@@ -10,10 +10,16 @@ namespace Hyper_Radio_API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            //This is a dynamic switch to change the connection string depending on lacal variable
+            var activeConnectionName = builder.Configuration["ConnectionStrings:ActiveConnection"] 
+                                       ?? "DefaultConnection";
+
+            var connectionString = builder.Configuration.GetConnectionString(activeConnectionName);
+
             // Add services to the container.
-            builder.Services.AddDbContext<HyperRadioDbContext>(options => options.UseSqlServer(
-                builder.Configuration.GetConnectionString("DefaultConnection"))
-            );
+            builder.Services.AddDbContext<HyperRadioDbContext>(options =>
+                options.UseSqlServer(connectionString))
+                ;
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
