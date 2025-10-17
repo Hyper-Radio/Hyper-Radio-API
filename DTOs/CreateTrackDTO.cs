@@ -9,6 +9,6 @@
         public int Duration { get; set; }
         public string TrackURL { get; set; }
         public string? ImageURL { get; set; }
-        public int CreatorId_FK { get; set; }s
+        public int CreatorId_FK { get; set; }
     }
 }
