@@ -3,3 +3,7 @@
 ################################################################################
 
 /.vs
+bin/
+obj/
+/obj/Debug/net8.0/Hyper-Radio-API.AssemblyInfo.cs
+/obj/Debug/net8.0/Hyper-Radio-API.AssemblyInfoInputs.cache
