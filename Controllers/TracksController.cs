@@ -1,51 +1,66 @@
-using Hyper_Radio_API.DTOs.TrackDTOs;
+﻿using Hyper_Radio_API.DTOs;
 using Hyper_Radio_API.Services.TrackServices;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Hyper_Radio_API.Controllers;
-
-[Route("api/tracks")]
-[ApiController]
-
-public class TracksController : Controller
+namespace Hyper_Radio_API.Controllers
 {
-    private readonly ITrackService _context;
-
-    public TracksController(ITrackService context)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TracksController : ControllerBase
     {
-        _context = context;
-    }
-    
-
-    [HttpGet]
-    public async Task<ActionResult<List<ReadTrackDTO>>> GetAllTracks()
-    {
-        var track = await _context.GetAllTracksAsync();
-
-        return Ok(track);
-    }
-
-
-    [HttpGet("(id:int)")]
-    public async Task<ActionResult<ReadTrackDTO>> GetTrackById(int id)
-    {
-        var track = await _context.GetTrackByIdAsync(id);
-
-        if (track == null)
+        private readonly ITrackService _trackService;
+        public TracksController(ITrackService trackService)
         {
-            return NotFound();
+            _trackService = trackService;
         }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TrackDTO>>> GetAllTracks()
+        {
+            var tracks = await _trackService.GetAllTracksAsync();
+            return Ok(tracks);
+        }
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<TrackDTO>> GetTrackById(int id)
+        {
+            var track = await _trackService.GetTrackByIdAsync(id);
+            if (track == null)
+            {
+                return NotFound();
+            }
+            return Ok(track);
+        }
+        [HttpPost]
+        public async Task<ActionResult<TrackDTO>> CreateTrack([FromBody] CreateTrackDTO track)
+        {
+            var createdTrack = await _trackService.CreateTrackAsync(track);
 
-        return Ok(track);
-    }
-    
-    [HttpPost]
-    public async Task<ActionResult<ReadTrackDTO>> CreateTrack(CreateTrackDTO trackDTO)
-    {
-        var trackId = _context.CreateTrackAsync(trackDTO);
+            if (createdTrack == null)
+            {
+                return BadRequest();
+            }
 
-        return CreatedAtAction(nameof(GetAllTracks), new { id = trackId });
+            return CreatedAtAction(nameof(GetTrackById), new { id = createdTrack.Id }, createdTrack);
+        }
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateTrack(int id, [FromBody] UpdateTrackDTO track)
+        {
+            var result = await _trackService.UpdateTrackAsync(id, track);
+            if (!result) 
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteTrack(int id)
+        {
+            var result = await _trackService.DeleteTrackAsync(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
     }
-    
-    
 }
