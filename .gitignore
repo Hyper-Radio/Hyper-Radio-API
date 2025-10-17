@@ -2,11 +2,26 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs
+# Build results
 bin/
 obj/
-/obj/Debug/net8.0/Hyper-Radio-API.AssemblyInfo.cs
-/obj/Debug/net8.0/Hyper-Radio-API.AssemblyInfoInputs.cache
-/obj/Debug/net8.0/Hyper-Radio-API.AssemblyInfo.cs
-/obj/Debug/net8.0/Hyper-Radio-API.AssemblyInfoInputs.cache
-/Hyper-Radio-API.csproj.user
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio / Rider
+.vs/
+.idea/
+
+# Build logs
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Publish output
+wwwroot/

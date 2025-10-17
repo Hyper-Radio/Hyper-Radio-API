@@ -15,5 +15,7 @@ namespace Hyper_Radio_API.Data
         public DbSet<Track> Tracks { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Follow> Follows { get; set; }
+        public DbSet<Show> Shows { get; set; }
+        public DbSet<ShowTrack> ShowTracks { get; set; }
     }
 }
