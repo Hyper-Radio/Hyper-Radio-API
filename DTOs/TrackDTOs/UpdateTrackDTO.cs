@@ -1,4 +1,4 @@
-﻿namespace Hyper_Radio_API.DTOs
+﻿namespace Hyper_Radio_API.DTOs.TrackDTOs
 {
     public class UpdateTrackDTO
     {

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hyper_Radio_API.Models
 {
@@ -21,6 +22,7 @@ namespace Hyper_Radio_API.Models
         public string? ImageURL { get; set; }
         
         [Required]
+        [ForeignKey("Creator")]
         public int CreatorId_FK { get; set; }
         public Creator Creator { get; set; }
         

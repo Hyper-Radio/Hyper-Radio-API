@@ -1,10 +1,10 @@
-﻿using Hyper_Radio_API.DTOs;
+﻿using Hyper_Radio_API.DTOs.TrackDTOs;
 using Hyper_Radio_API.Models;
 using Hyper_Radio_API.Repositories.TrackRepositories;
 
 namespace Hyper_Radio_API.Services.TrackServices
 {
-    public class TrackService
+    public class TrackService : ITrackService
     {
         private readonly ITrackRepository _trackRepository;
         public TrackService(ITrackRepository trackRepository)

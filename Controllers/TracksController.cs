@@ -1,4 +1,4 @@
-﻿using Hyper_Radio_API.DTOs;
+﻿using Hyper_Radio_API.DTOs.TrackDTOs;
 using Hyper_Radio_API.Services.TrackServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
