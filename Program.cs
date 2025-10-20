@@ -1,5 +1,7 @@
 
 using Hyper_Radio_API.Data;
+using Hyper_Radio_API.Repositories.TrackRepositories;
+using Hyper_Radio_API.Services.TrackServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hyper_Radio_API
@@ -19,7 +21,6 @@ namespace Hyper_Radio_API
             // Add services to the container.
             builder.Services.AddDbContext<HyperRadioDbContext>(options =>
                 options.UseSqlServer(connectionString))
-                ;
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
