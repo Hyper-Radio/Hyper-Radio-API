@@ -4,6 +4,7 @@ using Hyper_Radio_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hyper_Radio_API.Migrations
 {
     [DbContext(typeof(HyperRadioDbContext))]
-    partial class HyperRadioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251020093030_new")]
+    partial class @new
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,7 +86,13 @@ namespace Hyper_Radio_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("TrackId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TrackId_FK")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId_FK")
@@ -91,9 +100,9 @@ namespace Hyper_Radio_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TrackId_FK");
+                    b.HasIndex("TrackId");
 
-                    b.HasIndex("UserId_FK");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Favorites");
                 });
@@ -187,6 +196,9 @@ namespace Hyper_Radio_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CreatorId_FK")
                         .HasColumnType("int");
 
@@ -217,7 +229,7 @@ namespace Hyper_Radio_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId_FK");
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Tracks");
                 });
@@ -258,13 +270,13 @@ namespace Hyper_Radio_API.Migrations
                 {
                     b.HasOne("Hyper_Radio_API.Models.Track", "Track")
                         .WithMany()
-                        .HasForeignKey("TrackId_FK")
+                        .HasForeignKey("TrackId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Hyper_Radio_API.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId_FK")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -315,7 +327,7 @@ namespace Hyper_Radio_API.Migrations
                 {
                     b.HasOne("Hyper_Radio_API.Models.Creator", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorId_FK")
+                        .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -1,49 +1,42 @@
-using Hyper_Radio_API.Data;
+﻿using Hyper_Radio_API.Data;
 using Hyper_Radio_API.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
-namespace Hyper_Radio_API.Repositories;
-
-public class TrackRepository : ITrackRepository
+namespace Hyper_Radio_API.Repositories.TrackRepositories
 {
-
-    private readonly HyperRadioDbContext _context;
-
-    public TrackRepository(HyperRadioDbContext context)
+    public class TrackRepository : ITrackRepository
     {
-        _context = context;
-    }
-    
-    
-    public async Task<List<Track>> GetAllTracksAsync()
-    {
-        var tracks = await _context.Tracks.ToListAsync();
-        return tracks;
-    }
+        private readonly HyperRadioDbContext _context;
+        public TrackRepository(HyperRadioDbContext context)
+        {
+            _context = context;
+        }
+        public async Task<IEnumerable<Track>> GetAllTracksAsync()
+        {
+            return await _context.Tracks.ToListAsync();
+        }
+        public async Task<Track?> GetTrackByIdAsync(int id)
+        {
+            return await _context.Tracks.FindAsync(id);
+        }
 
-    public async Task<Track> GetTrackByIdAsync(int trackId)
-    {
+        public void CreateTrack(Track track)
+        {
+            _context.Tracks.Add(track);
+        }
+        public void UpdateTrack(Track track)
+        {
+            _context.Tracks.Update(track);
+        }
 
-        var track = await _context.Tracks.FirstOrDefaultAsync(t => t.Id == trackId);
-        return track;
-    }
-
-    public async Task<int> CreateTrackAsync(Track track)
-    {
-
-        await _context.Tracks.AddAsync(track);
-        await _context.SaveChangesAsync();
-
-        return track.Id;
-    }
-
-    public Task<Track> UpdateTrackAsync(Track track)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> DeleteTrackAsync(int trackId)
-    {
-        throw new NotImplementedException();
+        public void DeleteTrack(Track track)
+        {
+            _context.Remove(track);
+        }
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

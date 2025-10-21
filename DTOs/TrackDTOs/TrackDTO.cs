@@ -1,7 +1,7 @@
 ﻿using Hyper_Radio_API.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Hyper_Radio_API.DTOs
+namespace Hyper_Radio_API.DTOs.TrackDTOs
 {
     public class TrackDTO
     {
