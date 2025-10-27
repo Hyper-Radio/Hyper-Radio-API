@@ -43,7 +43,7 @@ public class ShowTracksController : Controller
     [HttpPost]
     public async Task<ActionResult<ReadShowTrackDTO>> CreateShowTrack(CreateShowTrackDTO showTrackDTO)
     {
-        var showTrackId = _context.CreateShowTrackAsync(showTrackDTO);
+        var showTrackId = await _context.CreateShowTrackAsync(showTrackDTO);
 
         return CreatedAtAction(nameof(GetAllShowTracks), new { id = showTrackId });
     }

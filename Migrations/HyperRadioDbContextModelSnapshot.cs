@@ -187,7 +187,7 @@ namespace Hyper_Radio_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CreatorId_FK")
+                    b.Property<int?>("CreatorId_FK")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -315,9 +315,7 @@ namespace Hyper_Radio_API.Migrations
                 {
                     b.HasOne("Hyper_Radio_API.Models.Creator", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorId_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatorId_FK");
 
                     b.Navigation("Creator");
                 });
