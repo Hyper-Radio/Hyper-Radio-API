@@ -21,10 +21,9 @@ namespace Hyper_Radio_API.Models
         public string TrackURL { get; set; }
         public string? ImageURL { get; set; }
         
-        [Required]
         [ForeignKey("Creator")]
-        public int CreatorId_FK { get; set; }
-        public Creator Creator { get; set; }
+        public int? CreatorId_FK { get; set; }
+        public Creator? Creator { get; set; }
         
         public ICollection<ShowTrack> ShowTracks { get; set; }
     }

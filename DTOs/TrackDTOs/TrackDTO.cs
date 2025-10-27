@@ -13,6 +13,6 @@ namespace Hyper_Radio_API.DTOs.TrackDTOs
         public int Duration { get; set; }
         public string TrackURL { get; set; }
         public string? ImageURL { get; set; }
-        public int CreatorId_FK { get; set; }
+        public int? CreatorId_FK { get; set; }
     }
 }
