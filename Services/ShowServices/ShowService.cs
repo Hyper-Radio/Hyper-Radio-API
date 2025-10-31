@@ -45,10 +45,13 @@ public class ShowService : IShowService
         };
     }
 
-    public async Task<Show?> GetShowEntityByIdAsync(int id)
+
+    public async Task<Show> GetShowEntityByIdAsync(int id)
     {
-        return await _context.GetShowByIdAsync(id);
+        var show = await _context.GetShowWithTracksAsync(id);
+        return show ?? throw new InvalidOperationException("Show not found.");
     }
+    
     
     public async Task<int> CreateShowAsync(CreateShowDTO showDTO)
     {
@@ -76,61 +79,67 @@ public class ShowService : IShowService
     public Task<bool> UpdateShowAsync(CreateShowDTO showDTO)
         => throw new NotImplementedException();
 
-    
     public async Task<string> GenerateShowPlaylistAsync(Show show)
+{
+    if (show.ShowTracks == null || !show.ShowTracks.Any())
+        throw new InvalidOperationException("Show has no tracks.");
+
+    var builder = new StringBuilder();
+    builder.AppendLine("#EXTM3U");
+    builder.AppendLine("#EXT-X-VERSION:3");
+
+    foreach (var showTrack in show.ShowTracks.OrderBy(t => t.Order))
     {
-        if (show.ShowTracks == null || !show.ShowTracks.Any())
-            throw new InvalidOperationException("Show has no tracks.");
+        if (showTrack.Track == null)
+            throw new InvalidOperationException($"Track with ID {showTrack.TrackId} not found.");
 
-        var builder = new StringBuilder();
-        builder.AppendLine("#EXTM3U");
-        builder.AppendLine("#EXT-X-VERSION:3");
+        var playlistUrl = showTrack.Track.TrackURL;
+        if (string.IsNullOrEmpty(playlistUrl))
+            continue;
 
-        foreach (var showTrack in show.ShowTracks.OrderBy(t => t.Order))
+        // Download track playlist or metadata from blob
+        var playlistText = await _blob.DownloadTextAsync(playlistUrl);
+        var basePath = Path.GetDirectoryName(playlistUrl)?.Replace("\\", "/");
+
+        var lines = playlistText.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        foreach (var line in lines)
         {
-            var playlistUrl = showTrack.Track.TrackURL;
-            if (string.IsNullOrEmpty(playlistUrl))
+            if (line.StartsWith("#EXTM3U") || line.StartsWith("#EXT-X-VERSION"))
                 continue;
 
-            var playlistText = await _blob.DownloadTextAsync(playlistUrl);
-            var basePath = Path.GetDirectoryName(playlistUrl)?.Replace("\\", "/");
-
-            var lines = playlistText.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            foreach (var line in lines)
+            if (line.StartsWith("#EXTINF"))
             {
-                if (line.StartsWith("#EXTM3U") || line.StartsWith("#EXT-X-VERSION"))
-                    continue;
-
-                if (line.StartsWith("#EXTINF"))
-                {
-                    builder.AppendLine(line);
-                    continue;
-                }
-
-                if (line.EndsWith(".ts"))
-                {
-                    var segmentUrl = line.StartsWith("http")
-                        ? line
-                        : $"{basePath}/{line}";
-                    builder.AppendLine(segmentUrl);
-                    continue;
-                }
-
                 builder.AppendLine(line);
+                continue;
             }
 
-            builder.AppendLine("#EXT-X-DISCONTINUITY");
-            builder.AppendLine($"#EXT-X-CUSTOM:FADEIN={showTrack.FadeIn},FADEOUT={showTrack.FadeOut}");
+            if (line.EndsWith(".ts"))
+            {
+                var segmentUrl = line.StartsWith("http")
+                    ? line
+                    : $"{basePath}/{line}";
+                builder.AppendLine(segmentUrl);
+                continue;
+            }
+
+            builder.AppendLine(line);
         }
 
-        builder.AppendLine("#EXT-X-ENDLIST");
-
-        var bytes = Encoding.UTF8.GetBytes(builder.ToString());
-        await using var stream = new MemoryStream(bytes);
-        return await _blob.UploadFileAsync(
-            stream,
-            $"shows/{show.Id}/show.m3u8",
-            "application/vnd.apple.mpegurl"
-        );
+        builder.AppendLine("#EXT-X-DISCONTINUITY");
+        builder.AppendLine($"#EXT-X-CUSTOM:FADEIN={showTrack.FadeIn},FADEOUT={showTrack.FadeOut}");
     }
+
+    builder.AppendLine("#EXT-X-ENDLIST");
+
+    var bytes = Encoding.UTF8.GetBytes(builder.ToString());
+    await using var stream = new MemoryStream(bytes);
+
+    // Upload show playlist to blob
+    var showPlaylistBlobName = $"shows/{show.Id}/show.m3u8";
+    return await _blob.UploadFileAsync(
+        stream,
+        showPlaylistBlobName,
+        "application/vnd.apple.mpegurl"
+    );
+}
 }

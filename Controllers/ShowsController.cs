@@ -38,11 +38,12 @@ public class ShowsController : ControllerBase
         var showId = await _context.CreateShowAsync(showDTO);
         return CreatedAtAction(nameof(GetShowById), new { id = showId }, null);
     }
-
+    
+    
     [HttpPost("{id:int}/generate-playlist")]
     public async Task<IActionResult> GenerateShowPlaylist(int id)
     {
-        var show = await _context.GetShowEntityByIdAsync(id); // make sure this exists
+        var show = await _context.GetShowEntityByIdAsync(id);  
         if (show == null)
             return NotFound();
 

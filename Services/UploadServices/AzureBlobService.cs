@@ -9,8 +9,7 @@ public class AzureBlobService
 
     public AzureBlobService(IOptions<AzureBlobSettings> options)
     {
-        var settings = options.Value;
-
+        var settings = options.Value ?? throw new ArgumentNullException(nameof(options));
         if (string.IsNullOrEmpty(settings.ConnectionString))
             throw new ArgumentNullException(nameof(settings.ConnectionString));
 
@@ -46,16 +45,31 @@ public class AzureBlobService
         }
         return urls;
     }
-    
-    //Downlaod Text async (its downloading the m3u8 for creating shows, just in memory/RAM not locally)
+
+    /// <summary>
+    /// Downloads a text blob. Accepts either full URL or relative blob name.
+    /// Automatically appends 'playlist.m3u8' if a folder is provided.
+    /// </summary>
     public async Task<string> DownloadTextAsync(string blobUrlOrName)
     {
-        // Allow passing either full URL or blob-relative name
+        if (string.IsNullOrWhiteSpace(blobUrlOrName))
+            throw new ArgumentException("Blob URL or name cannot be empty.", nameof(blobUrlOrName));
+
+        // Extract relative blob name if full URL is passed
         var blobName = blobUrlOrName.Contains(".core.windows.net/")
             ? blobUrlOrName[(blobUrlOrName.IndexOf(_containerClient.Name) + _containerClient.Name.Length + 1)..]
             : blobUrlOrName;
 
+        // If the blobName is a folder (no extension), append 'playlist.m3u8'
+        if (!Path.HasExtension(blobName))
+        {
+            blobName = blobName.TrimEnd('/') + "/playlist.m3u8";
+        }
+
         var blobClient = _containerClient.GetBlobClient(blobName);
+
+        if (!await blobClient.ExistsAsync())
+            throw new FileNotFoundException($"Blob '{blobName}' does not exist in container '{_containerClient.Name}'.");
 
         using var stream = new MemoryStream();
         await blobClient.DownloadToAsync(stream);
@@ -63,9 +77,6 @@ public class AzureBlobService
         using var reader = new StreamReader(stream);
         return await reader.ReadToEndAsync();
     }
-    
-    
-    
 }
 
 public class AzureBlobSettings

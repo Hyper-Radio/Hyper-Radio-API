@@ -37,6 +37,19 @@ namespace Hyper_Radio_API
                 builder.Configuration.GetSection("AzureBlob"));
             builder.Services.AddSingleton<AzureBlobService>();
             builder.Services.AddSingleton<HlsConverterService>();
+            
+            
+            // Add CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSwaggerUI", policy =>
+                {
+                    policy.AllowAnyOrigin()    // or specify origins
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+
 
             var app = builder.Build();
 
