@@ -46,6 +46,26 @@ public class AzureBlobService
         }
         return urls;
     }
+    
+    //Downlaod Text async (its downloading the m3u8 for creating shows, just in memory/RAM not locally)
+    public async Task<string> DownloadTextAsync(string blobUrlOrName)
+    {
+        // Allow passing either full URL or blob-relative name
+        var blobName = blobUrlOrName.Contains(".core.windows.net/")
+            ? blobUrlOrName[(blobUrlOrName.IndexOf(_containerClient.Name) + _containerClient.Name.Length + 1)..]
+            : blobUrlOrName;
+
+        var blobClient = _containerClient.GetBlobClient(blobName);
+
+        using var stream = new MemoryStream();
+        await blobClient.DownloadToAsync(stream);
+        stream.Position = 0;
+        using var reader = new StreamReader(stream);
+        return await reader.ReadToEndAsync();
+    }
+    
+    
+    
 }
 
 public class AzureBlobSettings

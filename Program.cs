@@ -1,6 +1,8 @@
 
 using Hyper_Radio_API.Data;
+using Hyper_Radio_API.Repositories;
 using Hyper_Radio_API.Repositories.TrackRepositories;
+using Hyper_Radio_API.Services.ShowServices;
 using Hyper_Radio_API.Services.TrackServices;
 using Hyper_Radio_API.Services.UploadServices;
 using Microsoft.EntityFrameworkCore;
@@ -14,8 +16,7 @@ namespace Hyper_Radio_API
             var builder = WebApplication.CreateBuilder(args);
 
             //This is a dynamic switch to change the connection string depending on lacal variable
-            var activeConnectionName = builder.Configuration["ConnectionStrings:ActiveConnection"] 
-                                       ?? "DefaultConnection";
+            var activeConnectionName = builder.Configuration["ConnectionStrings:ActiveConnection"];
 
             var connectionString = builder.Configuration.GetConnectionString(activeConnectionName);
 
@@ -28,6 +29,9 @@ namespace Hyper_Radio_API
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<ITrackService, TrackService>();
             builder.Services.AddScoped<ITrackRepository, TrackRepository>();
+            builder.Services.AddScoped<IShowService, ShowService>();
+            builder.Services.AddScoped<IShowRepository, ShowRepository>();
+
             
             builder.Services.Configure<AzureBlobSettings>(
                 builder.Configuration.GetSection("AzureBlob"));
@@ -59,7 +63,7 @@ namespace Hyper_Radio_API
             }
             
             */
-
+            
             app.Run();
         }
     }
