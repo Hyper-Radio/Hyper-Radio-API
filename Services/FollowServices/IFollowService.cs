@@ -1,4 +1,6 @@
 ﻿using Hyper_Radio_API.DTOs.FollowDTOs;
+using Hyper_Radio_API.Models;
+
 
 namespace Hyper_Radio_API.Services.FollowServices
 {
@@ -6,7 +8,9 @@ namespace Hyper_Radio_API.Services.FollowServices
     {
         Task<IEnumerable<FollowDTO>> GetAllFollowsAsync();
         Task<FollowDTO?> GetFollowByIdAsync(int id);
-        Task<bool> CreateFollowAsync(CreateFollowDTO follow);
+        Task<IEnumerable<Follow>> GetFollowsByUserIdAsync(int userId);
+        Task<IEnumerable<Follow>> GetFollowsByCreatorIdAsync(int creatorId);
+        Task<FollowDTO?> CreateFollowAsync(CreateFollowDTO follow);
         Task<bool> UpdateFollowAsync(int id, FollowDTO follow);
         Task<bool> DeleteFollowAsync(int id);
     }

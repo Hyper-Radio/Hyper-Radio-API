@@ -20,7 +20,7 @@ namespace Hyper_Radio_API
 
             // Add services to the container.
             builder.Services.AddDbContext<HyperRadioDbContext>(options =>
-                options.UseSqlServer(connectionString))
+                options.UseSqlServer(connectionString));
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

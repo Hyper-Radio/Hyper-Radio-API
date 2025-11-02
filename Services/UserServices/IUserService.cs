@@ -6,7 +6,7 @@ namespace Hyper_Radio_API.Services.UserServices
     {
         Task<IEnumerable<UserDTO>> GetAllUsersAsync();
         Task<UserDTO?> GetUserByIdAsync(int id);
-        Task<bool> CreateUserAsync(CreateUserDTO user);
+        Task<UserDTO?> CreateUserAsync(CreateUserDTO user);
         Task<bool> UpdateUserAsync(int id, UserDTO user);
         Task<bool> DeleteUserAsync(int id);
     }

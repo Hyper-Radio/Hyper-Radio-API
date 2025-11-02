@@ -6,7 +6,7 @@ namespace Hyper_Radio_API.Repositories.AdminRepositories
     {
         Task<IEnumerable<Admin>> GetAllAdminsAsync();
         Task<Admin?> GetAdminByIdAsync(int adminId);
-        Task<bool> CreateAdminAsync(Admin admin);
+        Task<Admin?> CreateAdminAsync(Admin admin);
         Task<bool> UpdateAdminAsync(Admin admin);
         Task<bool> DeleteAdminAsync(Admin admin);
     }

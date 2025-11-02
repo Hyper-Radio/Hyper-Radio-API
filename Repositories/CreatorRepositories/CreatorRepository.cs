@@ -11,10 +11,14 @@ namespace Hyper_Radio_API.Repositories.CreatorRepositories
         {
             _context = context;
         }
-        public async Task<bool> CreateCreatorAsync(Creator creator)
+        public async Task<Creator?> CreateCreatorAsync(Creator creator)
         {
             _context.Creators.Add(creator);
-            return await _context.SaveChangesAsync() > 0;
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return creator;
+            }
+            return null;
         }
 
         public async Task<bool> DeleteCreatorAsync(Creator creator)

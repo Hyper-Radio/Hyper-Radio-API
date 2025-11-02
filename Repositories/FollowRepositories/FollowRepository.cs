@@ -11,10 +11,14 @@ namespace Hyper_Radio_API.Repositories.FollowRepositories
         {
             _context = context;
         }
-        public async Task<bool> CreateFollowAsync(Follow follow)
+        public async Task<Follow?> CreateFollowAsync(Follow follow)
         {
             _context.Follows.Add(follow);
-            return await _context.SaveChangesAsync() > 0;
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return follow;
+            }
+            return null;
         }
 
         public async Task<bool> DeleteFollowAsync(Follow follow)
@@ -25,7 +29,7 @@ namespace Hyper_Radio_API.Repositories.FollowRepositories
 
         public async Task<IEnumerable<Follow>> GetAllFollowsAsync()
         {
-            return await _context.Follows.ToListAsync();    
+            return await _context.Follows.ToListAsync();
         }
 
         public async Task<Follow?> GetFollowByIdAsync(int followId)
@@ -37,6 +41,16 @@ namespace Hyper_Radio_API.Repositories.FollowRepositories
         {
             _context.Follows.Update(follow);
             return await _context.SaveChangesAsync() > 0;
+        }
+        public async Task<IEnumerable<Follow>> GetFollowsByUserIdAsync(int userId)
+        {
+            return await _context.Follows.Where(f => f.UserId_FK == userId)
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<Follow>> GetFollowsByCreatorIdAsync(int creatorId)
+        {
+            return await _context.Follows.Where(f => f.CreatorId_FK == creatorId)
+                .ToListAsync();
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Hyper_Radio_API.Services.FollowServices
                 UserId_FK = follow.UserId_FK
             };
         }
-        public async Task<bool> CreateFollowAsync(CreateFollowDTO follow)
+        public async Task<FollowDTO?> CreateFollowAsync(CreateFollowDTO follow)
         {
             Follow newFollow = new()
             {
@@ -42,7 +42,16 @@ namespace Hyper_Radio_API.Services.FollowServices
                 UserId_FK = follow.UserId_FK
             };
 
-            return await _followRepository.CreateFollowAsync(newFollow);
+            var createdFollow = await _followRepository.CreateFollowAsync(newFollow);
+
+            if (!createdFollow) { return null; }
+
+            return new FollowDTO
+            {
+                Id = newFollow.Id,
+                CreatorId_FK = newFollow.CreatorId_FK,
+                UserId_FK = newFollow.UserId_FK
+            };
         }
         public async Task<bool> UpdateFollowAsync(int id, FollowDTO updated)
         {
@@ -60,6 +69,14 @@ namespace Hyper_Radio_API.Services.FollowServices
             if (follow == null) { return false; }
 
             return await _followRepository.DeleteFollowAsync(follow);
+        }
+        public async Task<IEnumerable<Follow>> GetFollowsByUserIdAsync(int userId)
+        {
+            return await _followRepository.GetFollowsByUserIdAsync(userId);
+        }
+        public async Task<IEnumerable<Follow>> GetFollowsByCreatorIdAsync(int creatorId)
+        {
+            return await _followRepository.GetFollowsByCreatorIdAsync(creatorId);
         }
     }
 }
