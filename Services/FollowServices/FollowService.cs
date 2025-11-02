@@ -44,7 +44,7 @@ namespace Hyper_Radio_API.Services.FollowServices
 
             var createdFollow = await _followRepository.CreateFollowAsync(newFollow);
 
-            if (!createdFollow) { return null; }
+            if (createdFollow == null) { return null; }
 
             return new FollowDTO
             {
