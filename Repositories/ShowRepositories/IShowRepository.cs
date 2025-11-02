@@ -19,4 +19,10 @@ public interface IShowRepository
     
     //DELETE SHOW
     Task<bool> DeleteShowAsync(int showId);
+    
+    
+    Task<Show> GetShowWithTracksAsync(int id);
+
+    
+    
 }

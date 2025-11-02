@@ -45,17 +45,18 @@ namespace Hyper_Radio_API.Controllers
         }
         
         
-            [HttpPost("upload")]
+         [HttpPost("upload")]
     [Consumes("multipart/form-data")]
     
     
     public async Task<IActionResult> UploadTrack([FromForm] CreateTrackDTO dto)
-    {
+    { 
         var file = dto.File;
         
         //Checks if upload exists
         if (file == null || file.Length == 0)
-            return BadRequest("No file uploaded");
+            return BadRequest("No file uploaded or file already exists" +
+                              "");
 
         //Creates a trackfolder based on the name of the file
         var trackFolder = Path.GetFileNameWithoutExtension(file.FileName);

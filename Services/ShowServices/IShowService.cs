@@ -20,4 +20,12 @@ public interface IShowService
     
     //UPDATE SHOW
     public Task<bool> UpdateShowAsync(CreateShowDTO showDTO);
+    
+
+    //Gets back the whole Show entity used internally by ShowService
+    public Task<Show?> GetShowEntityByIdAsync(int id);
+    
+    public Task<string> GenerateShowPlaylistAsync(Show show);
+
+    
 }

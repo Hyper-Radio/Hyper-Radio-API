@@ -44,4 +44,13 @@ public class ShowRepository : IShowRepository
     {
         throw new NotImplementedException();
     }
+    
+    public async Task<Show> GetShowWithTracksAsync(int id)
+    {
+        return await _context.Shows
+            .Include(s => s.ShowTracks)
+            .ThenInclude(st => st.Track)
+            .FirstOrDefaultAsync(s => s.Id == id);
+    }
+    
 }

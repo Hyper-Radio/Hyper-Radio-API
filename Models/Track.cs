@@ -28,3 +28,6 @@ namespace Hyper_Radio_API.Models
         public ICollection<ShowTrack> ShowTracks { get; set; }
     }
 }
+
+
+

@@ -1,4 +1,5 @@
 ﻿using Hyper_Radio_API.DTOs;
+using Hyper_Radio_API.DTOs.ShowDTOs;
 
 namespace Hyper_Radio_API.Services.ShowTrackServices;
 

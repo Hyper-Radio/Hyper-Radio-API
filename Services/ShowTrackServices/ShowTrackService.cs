@@ -1,4 +1,5 @@
 ﻿using Hyper_Radio_API.DTOs;
+using Hyper_Radio_API.DTOs.ShowDTOs;
 using Hyper_Radio_API.Models;
 using Hyper_Radio_API.Repositories.ShowTrackRepositories;
 
@@ -51,21 +52,18 @@ public class ShowTrackService : IShowTrackService
     }
 
 
-
     public async Task<int> CreateShowTrackAsync(CreateShowTrackDTO showTrackDTO)
     {
         var showTrack = new ShowTrack
         {
-            Track = showTrackDTO.Track,
+            TrackId = showTrackDTO.TrackId,  
             Order = showTrackDTO.Order,
             FadeIn = showTrackDTO.FadeIn,
             FadeOut = showTrackDTO.FadeOut
         };
 
         var newShowTrackId = await _context.CreateShowTrackAsync(showTrack);
-
         return newShowTrackId;
-
     }
 
     public Task<bool> DeleteShowTrackAsync(int showTrackIdDTO)

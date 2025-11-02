@@ -7,9 +7,7 @@ public class ShowTrack
 {
     [Key] 
     public int Id { get; set; }
-    [Required]
     public int ShowId { get; set; }
-    [Required]
     public int TrackId { get; set; }
     
     [Required]
