@@ -79,7 +79,10 @@ public class ShowService : IShowService
     public Task<bool> UpdateShowAsync(CreateShowDTO showDTO)
         => throw new NotImplementedException();
 
-    public async Task<string> GenerateShowPlaylistAsync(Show show)
+    
+    
+    //GENERATE A SHOW 
+ public async Task<string> GenerateShowPlaylistAsync(Show show)
 {
     if (show.ShowTracks == null || !show.ShowTracks.Any())
         throw new InvalidOperationException("Show has no tracks.");
@@ -90,21 +93,25 @@ public class ShowService : IShowService
 
     foreach (var showTrack in show.ShowTracks.OrderBy(t => t.Order))
     {
-        if (showTrack.Track == null)
-            throw new InvalidOperationException($"Track with ID {showTrack.TrackId} not found.");
-
         var playlistUrl = showTrack.Track.TrackURL;
         if (string.IsNullOrEmpty(playlistUrl))
             continue;
 
-        // Download track playlist or metadata from blob
+        // Download the track's m3u8
         var playlistText = await _blob.DownloadTextAsync(playlistUrl);
+
+        // Extract base path from URL for relative .ts files
         var basePath = Path.GetDirectoryName(playlistUrl)?.Replace("\\", "/");
+        if (!string.IsNullOrEmpty(basePath) && !basePath.EndsWith("/"))
+            basePath += "/";
 
         var lines = playlistText.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
         foreach (var line in lines)
         {
-            if (line.StartsWith("#EXTM3U") || line.StartsWith("#EXT-X-VERSION"))
+            // Skip playlist headers
+            if (line.StartsWith("#EXTM3U") || line.StartsWith("#EXT-X-VERSION") ||
+                line.StartsWith("#EXT-X-TARGETDURATION") || line.StartsWith("#EXT-X-MEDIA-SEQUENCE"))
                 continue;
 
             if (line.StartsWith("#EXTINF"))
@@ -115,9 +122,12 @@ public class ShowService : IShowService
 
             if (line.EndsWith(".ts"))
             {
+                // Convert relative paths to full URLs
                 var segmentUrl = line.StartsWith("http")
                     ? line
-                    : $"{basePath}/{line}";
+                    : $"{basePath}{line}".Replace(" ", "%20"); // encode spaces
+                if (!segmentUrl.StartsWith("http"))
+                    segmentUrl = "https://" + segmentUrl.TrimStart('/'); // ensure https://
                 builder.AppendLine(segmentUrl);
                 continue;
             }
@@ -125,21 +135,23 @@ public class ShowService : IShowService
             builder.AppendLine(line);
         }
 
+        // Add discontinuity and custom fade info for this track
         builder.AppendLine("#EXT-X-DISCONTINUITY");
-        builder.AppendLine($"#EXT-X-CUSTOM:FADEIN={showTrack.FadeIn},FADEOUT={showTrack.FadeOut}");
+        builder.AppendLine($"#EXT-X-CUSTOM:FADEIN={showTrack.FadeIn:F1},FADEOUT={showTrack.FadeOut:F1}");
     }
 
     builder.AppendLine("#EXT-X-ENDLIST");
 
+    // Upload the generated playlist to Azure Blob
     var bytes = Encoding.UTF8.GetBytes(builder.ToString());
     await using var stream = new MemoryStream(bytes);
 
-    // Upload show playlist to blob
-    var showPlaylistBlobName = $"shows/{show.Id}/show.m3u8";
     return await _blob.UploadFileAsync(
         stream,
-        showPlaylistBlobName,
+        $"shows/{show.Id}/show.m3u8",
         "application/vnd.apple.mpegurl"
     );
 }
+ 
+ 
 }
