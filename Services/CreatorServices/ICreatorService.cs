@@ -6,7 +6,7 @@ namespace Hyper_Radio_API.Services.CreatorServices
     {
         Task<IEnumerable<CreatorDTO>> GetAllCreatorsAsync();
         Task<CreatorDTO?> GetCreatorByIdAsync(int id);
-        Task<bool> CreateCreatorAsync(CreateCreatorDTO creator);
+        Task<CreatorDTO?> CreateCreatorAsync(CreateCreatorDTO creator);
         Task<bool> UpdateCreatorAsync(int id, CreatorDTO creator);
         Task<bool> DeleteCreatorAsync(int id);
     }

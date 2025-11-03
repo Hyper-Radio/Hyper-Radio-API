@@ -38,7 +38,7 @@ namespace Hyper_Radio_API.Services.UserServices
                 ProfilePictureURL = user.ProfilePictureURL
             };
         }
-        public async Task<bool> CreateUserAsync(CreateUserDTO user)
+        public async Task<UserDTO?> CreateUserAsync(CreateUserDTO user)
         {
             User newUser = new()
             {
@@ -48,7 +48,18 @@ namespace Hyper_Radio_API.Services.UserServices
                 ProfilePictureURL = user.ProfilePictureURL
             };
 
-            return await _userRepository.CreateUserAsync(newUser);
+            var createdUser = await _userRepository.CreateUserAsync(newUser);
+
+            if (createdUser == null) { return null; }
+
+            return new UserDTO
+            {
+                Id = createdUser.Id,
+                Email = createdUser.Email,
+                FirstName = createdUser.FirstName,
+                LastName = createdUser.LastName,
+                ProfilePictureURL = createdUser.ProfilePictureURL
+            };
         }
         public async Task<bool> UpdateUserAsync(int id, UserDTO updated)
         {

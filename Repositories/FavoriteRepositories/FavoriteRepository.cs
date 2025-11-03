@@ -11,10 +11,14 @@ namespace Hyper_Radio_API.Repositories.FavoriteRepositories
         {
             _context = context;
         }
-        public async Task<bool> CreateFavoriteAsync(Favorite favorite)
+        public async Task<Favorite?> CreateFavoriteAsync(Favorite favorite)
         {
             _context.Favorites.Add(favorite);
-            return await _context.SaveChangesAsync() > 0;
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return favorite;
+            }
+            return null;
         }
 
         public async Task<bool> DeleteFavoriteAsync(Favorite favorite)
@@ -37,6 +41,16 @@ namespace Hyper_Radio_API.Repositories.FavoriteRepositories
         {
             _context.Favorites.Update(favorite);
             return await _context.SaveChangesAsync() > 0;
+        }
+        public async Task<IEnumerable<Favorite>> GetFavoritesByUserIdAsync(int userId)
+        {
+            return await _context.Favorites.Where(f => f.UserId_FK == userId)
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<Favorite>> GetFavoritesByTrackIdAsync(int trackId)
+        {
+            return await _context.Favorites.Where(f => f.TrackId_FK == trackId)
+                .ToListAsync();
         }
     }
 }

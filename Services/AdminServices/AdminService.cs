@@ -11,12 +11,20 @@ namespace Hyper_Radio_API.Services.AdminServices
         {
             _repository = repository;
         }
-        public async Task<bool> CreateAdminAsync(CreateAdminDTO admin)
+        public async Task<AdminDTO?> CreateAdminAsync(CreateAdminDTO admin)
         {
             //Change later
             Admin newAdmin = new() { Email = admin.Email, PasswordHash = admin.PasswordHash };
 
-            return await _repository.CreateAdminAsync(newAdmin);
+            var createdAdmin = await _repository.CreateAdminAsync(newAdmin);
+            if (createdAdmin == null)
+            {
+                return null;
+            }
+            return new AdminDTO
+            {
+                Email = newAdmin.Email,
+            };
         }
 
         public async Task<bool> DeleteAdminAsync(int id)

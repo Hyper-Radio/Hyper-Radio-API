@@ -11,10 +11,14 @@ namespace Hyper_Radio_API.Repositories.AdminRepositories
         {
             _context = context;
         }
-        public async Task<bool> CreateAdminAsync(Admin admin)
+        public async Task<Admin?> CreateAdminAsync(Admin admin)
         {
             _context.Admins.Add(admin);
-            return await _context.SaveChangesAsync() > 0;
+            if (await _context.SaveChangesAsync() > 0)
+            { 
+                return admin;
+            }
+            return null;
         }
 
         public async Task<bool> DeleteAdminAsync(Admin admin)

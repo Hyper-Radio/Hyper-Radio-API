@@ -1,8 +1,9 @@
 ﻿using Hyper_Radio_API.DTOs.FavoriteDTOs;
 using Hyper_Radio_API.Models;
 using Hyper_Radio_API.Repositories.FavoriteRepositories;
+using Microsoft.EntityFrameworkCore;
 
-namespace Hyper_Radio_API.Services.FavoriteServces
+namespace Hyper_Radio_API.Services.FavoriteServices
 {
     public class FavoriteService : IFavoriteService
     {
@@ -34,7 +35,7 @@ namespace Hyper_Radio_API.Services.FavoriteServces
                 UserId_FK = favorite.UserId_FK
             };
         }
-        public async Task<bool> CreateFavoriteAsync(CreateFavoriteDTO favorite)
+        public async Task<FavoriteDTO?> CreateFavoriteAsync(CreateFavoriteDTO favorite)
         {
             Favorite newFavorite = new()
             {
@@ -42,7 +43,14 @@ namespace Hyper_Radio_API.Services.FavoriteServces
                 UserId_FK = favorite.UserId_FK
             };
 
-            return await _favoriteRepository.CreateFavoriteAsync(newFavorite);
+            var createdFavorite = await _favoriteRepository.CreateFavoriteAsync(newFavorite);
+            if (createdFavorite == null) { return null; }
+            return new FavoriteDTO
+            {
+                Id = newFavorite.Id,
+                TrackId_FK = newFavorite.TrackId_FK,
+                UserId_FK = newFavorite.UserId_FK
+            };
         }
         public async Task<bool> UpdateFavoriteAsync(int id, FavoriteDTO updated)
         {
@@ -60,6 +68,26 @@ namespace Hyper_Radio_API.Services.FavoriteServces
             if (favorite == null) { return false; }
 
             return await _favoriteRepository.DeleteFavoriteAsync(favorite);
+        }
+        public async Task<IEnumerable<FavoriteDTO>> GetFavoritesByUserIdAsync(int userId)
+        {
+            var favorites = await _favoriteRepository.GetFavoritesByUserIdAsync(userId);
+            return favorites.Select(f => new FavoriteDTO
+            {
+                Id = f.Id,
+                TrackId_FK = f.TrackId_FK,
+                UserId_FK = f.UserId_FK
+            });
+        }
+        public async Task<IEnumerable<FavoriteDTO>> GetFavoritesByTrackIdAsync(int trackId)
+        {
+            var favorites = await _favoriteRepository.GetFavoritesByTrackIdAsync(trackId);
+            return favorites.Select(f => new FavoriteDTO
+            {
+                Id = f.Id,
+                TrackId_FK = f.TrackId_FK,
+                UserId_FK = f.UserId_FK
+            });
         }
     }
 }

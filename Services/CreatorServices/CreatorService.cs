@@ -37,7 +37,7 @@ namespace Hyper_Radio_API.Services.CreatorServices
                 ProfilePictureURL = creator.ProfilePictureURL
             };
         }
-        public async Task<bool> CreateCreatorAsync(CreateCreatorDTO creator)
+        public async Task<CreatorDTO?> CreateCreatorAsync(CreateCreatorDTO creator)
         {
             Creator newCreator = new()
             {
@@ -47,7 +47,16 @@ namespace Hyper_Radio_API.Services.CreatorServices
                 ProfilePictureURL = creator.ProfilePictureURL
             };
 
-            return await _creatorRepository.CreateCreatorAsync(newCreator);
+            var createdCreator = await _creatorRepository.CreateCreatorAsync(newCreator);
+            if (createdCreator == null) { return null; }
+            return new CreatorDTO
+            {
+                Id = newCreator.Id,
+                Username = newCreator.Username,
+                Email = newCreator.Email,
+                Description = newCreator.Description,
+                ProfilePictureURL = newCreator.ProfilePictureURL
+            };
         }
         public async Task<bool> UpdateCreatorAsync(int id, CreatorDTO updated)
         {

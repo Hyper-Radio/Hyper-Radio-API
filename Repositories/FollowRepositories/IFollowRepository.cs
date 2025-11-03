@@ -6,7 +6,9 @@ namespace Hyper_Radio_API.Repositories.FollowRepositories
     {
         Task<IEnumerable<Follow>> GetAllFollowsAsync();
         Task<Follow?> GetFollowByIdAsync(int followId);
-        Task<bool> CreateFollowAsync(Follow follow);
+        Task<IEnumerable<Follow>> GetFollowsByUserIdAsync(int userId);
+        Task<IEnumerable<Follow>> GetFollowsByCreatorIdAsync(int creatorId);
+        Task<Follow?> CreateFollowAsync(Follow follow);
         Task<bool> UpdateFollowAsync(Follow follow);
         Task<bool> DeleteFollowAsync(Follow follow);
     }

@@ -11,12 +11,15 @@ namespace Hyper_Radio_API.Repositories.UserRepositories
         {
             _context = context;
         }
-        public async Task<bool> CreateUserAsync(User user)
+        public async Task<User?> CreateUserAsync(User user)
         {
-            _context.Users.Add(user);
-            return await _context.SaveChangesAsync() > 0;
+            await _context.Users.AddAsync(user);
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return user;
+            }
+            return null;
         }
-
         public async Task<bool> DeleteUserAsync(User user)
         {
             _context.Users.Remove(user);
