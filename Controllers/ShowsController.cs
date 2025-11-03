@@ -40,16 +40,20 @@ public class ShowsController : ControllerBase
     }
     
     
-    [HttpPost("{id:int}/generate-playlist")]
-    public async Task<IActionResult> GenerateShowPlaylist(int id)
+    [HttpGet("{id:int}/playlist-urls")]
+    public async Task<IActionResult> GetShowPlaylistUrls(int id)
     {
-        var show = await _context.GetShowEntityByIdAsync(id);  
+        // Fetch the show with its tracks
+        var show = await _context.GetShowEntityByIdAsync(id);
         if (show == null)
             return NotFound();
 
-        var playlistUrl = await _context.GenerateShowPlaylistAsync(show);
-        return Ok(new { PlaylistUrl = playlistUrl });
+        // Get ordered list of M3U8 URLs
+        var playlistUrls = await _context.GetShowPlaylistUrlsAsync(show);
+
+        return Ok(new { PlaylistUrls = playlistUrls });
     }
+    
     
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteShow(int id)
