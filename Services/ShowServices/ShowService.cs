@@ -6,8 +6,6 @@ using Hyper_Radio_API.Services.UploadServices;
 
 namespace Hyper_Radio_API.Services.ShowServices;
 
-
-
 public class ShowService : IShowService
 {
     private readonly IShowRepository _context;
