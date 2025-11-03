@@ -11,6 +11,7 @@ public class ShowService : IShowService
     private readonly IShowRepository _context;
     private readonly AzureBlobService _blob;
 
+    
     public ShowService(IShowRepository context, AzureBlobService blob)
     {
         _context = context;
