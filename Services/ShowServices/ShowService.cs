@@ -30,6 +30,7 @@ public class ShowService : IShowService
         }).ToList();
     }
 
+    
     public async Task<ReadShowDTO?> GetShowByIdAsync(int id)
     {
         var show = await _context.GetShowByIdAsync(id);
