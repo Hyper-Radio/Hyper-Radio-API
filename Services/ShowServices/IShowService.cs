@@ -25,7 +25,6 @@ public interface IShowService
     //Gets back the whole Show entity used internally by ShowService
     public Task<Show?> GetShowEntityByIdAsync(int id);
     
-    public Task<string> GenerateShowPlaylistAsync(Show show);
 
-    
+    public Task<List<string>> GetShowPlaylistUrlsAsync(Show show);
 }
