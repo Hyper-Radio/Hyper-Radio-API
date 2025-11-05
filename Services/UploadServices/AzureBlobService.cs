@@ -7,6 +7,8 @@ public class AzureBlobService
 {
     private readonly BlobContainerClient _containerClient;
 
+    
+    
     public AzureBlobService(IOptions<AzureBlobSettings> options)
     {
         var settings = options.Value ?? throw new ArgumentNullException(nameof(options));
@@ -25,6 +27,8 @@ public class AzureBlobService
         return blobClient.Uri.ToString();
     }
 
+    
+    
     public async Task<string> DownloadFileAsync(string blobName, string localPath)
     {
         var blobClient = _containerClient.GetBlobClient(blobName);
@@ -32,6 +36,10 @@ public class AzureBlobService
         return localPath;
     }
 
+    
+    
+    
+    
     public async Task<List<string>> UploadDirectoryAsync(string directory, string trackFolder)
     {
         var urls = new List<string>();
@@ -45,11 +53,15 @@ public class AzureBlobService
         }
         return urls;
     }
-
-    /// <summary>
+    
+    
+    
     /// Downloads a text blob. Accepts either full URL or relative blob name.
     /// Automatically appends 'playlist.m3u8' if a folder is provided.
-    /// </summary>
+    
+    
+    
+    //I GUESS WE WONT USE THIS ANYMORE
     public async Task<string> DownloadTextAsync(string blobUrlOrName)
     {
         if (string.IsNullOrWhiteSpace(blobUrlOrName))

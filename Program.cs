@@ -42,11 +42,11 @@ namespace Hyper_Radio_API
             // Add CORS
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowSwaggerUI", policy =>
+                options.AddPolicy("AllowFrontend", policy =>
                 {
-                    policy.AllowAnyOrigin()    // or specify origins
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
+                    policy.WithOrigins("http://localhost:5122") // your MVC port
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
             });
 
@@ -61,6 +61,9 @@ namespace Hyper_Radio_API
             }
 
             app.UseHttpsRedirection();
+            
+            app.UseCors("AllowFrontend");
+
 
             app.UseAuthorization();
 

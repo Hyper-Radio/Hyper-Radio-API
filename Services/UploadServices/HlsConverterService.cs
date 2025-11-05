@@ -4,6 +4,8 @@ namespace Hyper_Radio_API.Services.UploadServices;
 
 public class HlsConverterService
 {
+    
+    //Configuration DI 
         private readonly string _ffmpegPath;
 
         public HlsConverterService(IConfiguration config)
@@ -13,6 +15,8 @@ public class HlsConverterService
                 throw new Exception("FFmpeg path not configured");
         }
 
+        
+        //This method is for runnign the FFMPEG Conversion on an input, taking in inputFile path and an outputDir(folder that will be in blob)
         public async Task ConvertToHlsAsync(string inputFile, string outputDir)
         {
             Directory.CreateDirectory(outputDir);

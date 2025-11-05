@@ -58,12 +58,12 @@ namespace Hyper_Radio_API.Controllers
             return BadRequest("No file uploaded or file already exists" +
                               "");
 
-        //Creates a trackfolder based on the name of the file
+        //Creates a track folder based on the name of the file
         var trackFolder = Path.GetFileNameWithoutExtension(file.FileName);
 
         try
         {
-            //Upload MP3 to blob under its own subfolder
+            //Upload raw audio file to blob under its own subfolder
             await using var ms = file.OpenReadStream();
             var mp3Url = await _blob.UploadFileAsync(ms, $"{trackFolder}/{file.FileName}", file.ContentType ?? "audio/mpeg");
             _logger.LogInformation("Uploaded MP3: {Url}", mp3Url);
@@ -80,7 +80,7 @@ namespace Hyper_Radio_API.Controllers
             // Upload HLS files (segments + m3u8)
             var hlsUrls = await _blob.UploadDirectoryAsync(hlsDir, trackFolder);
 
-            // Cleanup files on local to save storage etc
+            // Cleanup files on local to save storage etc, right now on Joshuas computer
             Directory.Delete(hlsDir, true);
             System.IO.File.Delete(localPath);
 
