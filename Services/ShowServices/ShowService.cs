@@ -1,5 +1,6 @@
 using System.Text;
 using Hyper_Radio_API.DTOs.ShowDTOs;
+using Hyper_Radio_API.DTOs.TrackDTOs;
 using Hyper_Radio_API.Models;
 using Hyper_Radio_API.Repositories;
 using Hyper_Radio_API.Services.UploadServices;
@@ -8,19 +9,19 @@ namespace Hyper_Radio_API.Services.ShowServices;
 
 public class ShowService : IShowService
 {
-    private readonly IShowRepository _context;
+    private readonly IShowRepository _showRepository;
     private readonly AzureBlobService _blob;
 
     
-    public ShowService(IShowRepository context, AzureBlobService blob)
+    public ShowService(IShowRepository showRepository, AzureBlobService blob)
     {
-        _context = context;
+        _showRepository = showRepository;
         _blob = blob;
     }
 
     public async Task<List<ReadShowDTO>> GetAllShowsAsync()
     {
-        var shows = await _context.GetAllShowsAsync();
+        var shows = await _showRepository.GetAllShowsAsync();
         return shows.Select(s => new ReadShowDTO
         {
             Id = s.Id,
@@ -34,7 +35,7 @@ public class ShowService : IShowService
     
     public async Task<ReadShowDTO?> GetShowByIdAsync(int id)
     {
-        var show = await _context.GetShowByIdAsync(id);
+        var show = await _showRepository.GetShowByIdAsync(id);
         if (show == null) return null;
 
         return new ReadShowDTO
@@ -50,7 +51,7 @@ public class ShowService : IShowService
 
     public async Task<Show> GetShowEntityByIdAsync(int id)
     {
-        var show = await _context.GetShowWithTracksAsync(id);
+        var show = await _showRepository.GetShowWithTracksAsync(id);
         return show ?? throw new InvalidOperationException("Show not found.");
     }
     
@@ -71,7 +72,7 @@ public class ShowService : IShowService
             }).ToList()
         };
 
-        var newShowId = await _context.CreateShowAsync(show);
+        var newShowId = await _showRepository.CreateShowAsync(show);
         return newShowId;
     }
 
@@ -98,7 +99,30 @@ public Task<bool> DeleteShowAsync(int showIdDTO)
 public Task<bool> UpdateShowAsync(CreateShowDTO showDTO)
     => throw new NotImplementedException();
 
+public async Task<ShowWithTrackDTO?> GetShowWithTracksAsync(int showId)
+    {
+        var show = await _showRepository.GetShowByIdAsync(showId);
+        if (show == null) return null;
+        var tracks = await _showRepository.GetTracksByShowIdAsync(showId);
 
+        return new ShowWithTrackDTO
+        {
+            Id = show.Id,
+            Name = show.Name,
+            Description = show.Description,
+            Tracks = tracks.Select(t => new TrackDTO
+            {
+                Id = t.Id,
+                Title = t.Title,
+                ReleaseYear = t.ReleaseYear,
+                Genre = t.Genre,
+                Description = t.Description,
+                Duration = t.Duration,
+                TrackURL = t.TrackURL,
+                ImageURL = t.ImageURL
+            }).ToList()
+        };
+    }
 
  
  
