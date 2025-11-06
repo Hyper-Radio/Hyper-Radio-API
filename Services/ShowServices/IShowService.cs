@@ -27,4 +27,6 @@ public interface IShowService
     
 
     public Task<List<string>> GetShowPlaylistUrlsAsync(Show show);
+
+    public Task<ShowWithTrackDTO?> GetShowWithTracksAsync(int id);
 }

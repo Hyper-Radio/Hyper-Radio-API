@@ -8,24 +8,24 @@ namespace Hyper_Radio_API.Controllers;
 [ApiController]
 public class ShowsController : ControllerBase
 {
-    private readonly IShowService _context;
+    private readonly IShowService _service;
 
-    public ShowsController(IShowService context)
+    public ShowsController(IShowService service)
     {
-        _context = context;
+        _service = service;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<ReadShowDTO>>> GetAllShows()
     {
-        var shows = await _context.GetAllShowsAsync();
+        var shows = await _service.GetAllShowsAsync();
         return Ok(shows);
     }
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<ReadShowDTO>> GetShowById(int id)
     {
-        var show = await _context.GetShowByIdAsync(id);
+        var show = await _service.GetShowByIdAsync(id);
         if (show == null)
             return NotFound();
 
@@ -35,7 +35,7 @@ public class ShowsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateShow([FromBody] CreateShowDTO showDTO)
     {
-        var showId = await _context.CreateShowAsync(showDTO);
+        var showId = await _service.CreateShowAsync(showDTO);
         return CreatedAtAction(nameof(GetShowById), new { id = showId }, null);
     }
     
@@ -44,12 +44,12 @@ public class ShowsController : ControllerBase
     public async Task<IActionResult> GetShowPlaylistUrls(int id)
     {
         // Fetch the show with its tracks
-        var show = await _context.GetShowEntityByIdAsync(id);
+        var show = await _service.GetShowEntityByIdAsync(id);
         if (show == null)
             return NotFound();
 
         // Get ordered list of M3U8 URLs
-        var playlistUrls = await _context.GetShowPlaylistUrlsAsync(show);
+        var playlistUrls = await _service.GetShowPlaylistUrlsAsync(show);
 
         return Ok(new { PlaylistUrls = playlistUrls });
     }
@@ -58,9 +58,19 @@ public class ShowsController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteShow(int id)
     {
-        var deleted = await _context.DeleteShowAsync(id);
+        var deleted = await _service.DeleteShowAsync(id);
         if (!deleted)
             return NotFound();
         return NoContent();
+    }
+
+    [HttpGet("{id:int}/tracks")]
+
+    public async Task<ActionResult<ShowWithTrackDTO>> GetShowWithTracks(int id)
+    {
+        var showWithTracks = await _service.GetShowWithTracksAsync(id);
+        if (showWithTracks == null)
+            return NotFound();
+        return Ok(showWithTracks);
     }
 }
