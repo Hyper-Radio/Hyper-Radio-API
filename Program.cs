@@ -60,11 +60,7 @@ namespace Hyper_Radio_API
             if (app.Environment.IsProduction())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.RoutePrefix = "";
-                });
-
+                app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();
