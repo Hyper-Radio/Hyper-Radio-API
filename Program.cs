@@ -15,10 +15,7 @@ namespace Hyper_Radio_API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            //This is a dynamic switch to change the connection string depending on lacal variable
-            var activeConnectionName = builder.Configuration["ConnectionStrings:ActiveConnection"];
-
-            var connectionString = builder.Configuration.GetConnectionString(activeConnectionName);
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             // Add services to the container.
             builder.Services.AddDbContext<HyperRadioDbContext>(options =>
@@ -58,6 +55,16 @@ namespace Hyper_Radio_API
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+            }
+
+            if (app.Environment.IsProduction())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.RoutePrefix = "";
+                });
+
             }
 
             app.UseHttpsRedirection();
