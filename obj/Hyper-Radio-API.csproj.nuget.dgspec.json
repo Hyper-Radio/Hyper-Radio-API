@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/joshuang/Desktop/Programming/Hyper Radio/Hyper-Radio-API/Hyper-Radio-API.csproj": {}
+    "/Users/cajsa/Desktop/Joshua/HyperRadioAPI/Hyper-Radio-API.csproj": {}
   },
   "projects": {
-    "/Users/joshuang/Desktop/Programming/Hyper Radio/Hyper-Radio-API/Hyper-Radio-API.csproj": {
+    "/Users/cajsa/Desktop/Joshua/HyperRadioAPI/Hyper-Radio-API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/joshuang/Desktop/Programming/Hyper Radio/Hyper-Radio-API/Hyper-Radio-API.csproj",
+        "projectUniqueName": "/Users/cajsa/Desktop/Joshua/HyperRadioAPI/Hyper-Radio-API.csproj",
         "projectName": "Hyper-Radio-API",
-        "projectPath": "/Users/joshuang/Desktop/Programming/Hyper Radio/Hyper-Radio-API/Hyper-Radio-API.csproj",
-        "packagesPath": "/Users/joshuang/.nuget/packages/",
-        "outputPath": "/Users/joshuang/Desktop/Programming/Hyper Radio/Hyper-Radio-API/obj/",
+        "projectPath": "/Users/cajsa/Desktop/Joshua/HyperRadioAPI/Hyper-Radio-API.csproj",
+        "packagesPath": "/Users/cajsa/.nuget/packages/",
+        "outputPath": "/Users/cajsa/Desktop/Joshua/HyperRadioAPI/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/joshuang/.nuget/NuGet/NuGet.Config"
+          "/Users/cajsa/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -56,6 +56,10 @@
               "target": "Package",
               "version": "[4.0.3, )"
             },
+            "Google.GenAI": {
+              "target": "Package",
+              "version": "[0.6.0, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.21, )"
@@ -96,20 +100,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.21, 8.0.21]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.osx-arm64",
-              "version": "[8.0.21, 8.0.21]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.21, 8.0.21]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -118,7 +108,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.306/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.307/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
