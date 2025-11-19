@@ -70,6 +70,10 @@ namespace Hyper_Radio_API
             });
             builder.Services.AddAuthorization();
             var app = builder.Build();
+            
+            // Enable CORS globally
+            app.UseCors("AllowSwaggerUI");
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
