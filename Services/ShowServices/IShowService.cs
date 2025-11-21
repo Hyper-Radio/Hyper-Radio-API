@@ -1,4 +1,5 @@
 using Hyper_Radio_API.DTOs.ShowDTOs;
+using Hyper_Radio_API.DTOs.TrackDTOs;
 using Hyper_Radio_API.Models;
 
 namespace Hyper_Radio_API.Services.ShowServices;
@@ -10,7 +11,7 @@ public interface IShowService
     public Task<List<ReadShowDTO>> GetAllShowsAsync();
     
     //GET SHOWS BY ID
-    public Task<ReadShowDTO> GetShowByIdAsync(int showDTOId);
+    public Task<ShowWithTracksDTO?> GetShowByIdAsync(int showDTOId);
     
     //CREATE SHOW
     public Task<int> CreateShowAsync(CreateShowDTO showDTO);
@@ -27,4 +28,5 @@ public interface IShowService
     
 
     public Task<List<string>> GetShowPlaylistUrlsAsync(Show show);
+    public Task<List<TrackDTO>> GetTracksByShowIdAsync(int id);
 }

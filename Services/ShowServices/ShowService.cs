@@ -1,5 +1,6 @@
 using System.Text;
 using Hyper_Radio_API.DTOs.ShowDTOs;
+using Hyper_Radio_API.DTOs.TrackDTOs;
 using Hyper_Radio_API.Models;
 using Hyper_Radio_API.Repositories;
 using Hyper_Radio_API.Services.UploadServices;
@@ -32,18 +33,18 @@ public class ShowService : IShowService
     }
 
     
-    public async Task<ReadShowDTO?> GetShowByIdAsync(int id)
+    public async Task<ShowWithTracksDTO?> GetShowByIdAsync(int id)
     {
         var show = await _context.GetShowByIdAsync(id);
+        var tracks = await GetTracksByShowIdAsync(id);
         if (show == null) return null;
 
-        return new ReadShowDTO
+        return new ShowWithTracksDTO
         {
             Id = show.Id,
             Name = show.Name,
             Description = show.Description,
-            ScheduledStart = show.ScheduledStart,
-            ShowTracks = show.ShowTracks
+            Tracks = tracks
         };
     }
 
@@ -91,6 +92,27 @@ public class ShowService : IShowService
         return playlistUrls;
     }
 
+    public async Task<List<TrackDTO>> GetTracksByShowIdAsync(int id)
+    {
+        var show = await GetShowEntityByIdAsync(id);
+        var trackDTOs = show.ShowTracks
+            .OrderBy(st => st.Order)
+            .Select(st => new TrackDTO
+            {
+                Id = st.Track.Id,
+                Title = st.Track.Title,
+                ReleaseYear = st.Track.ReleaseYear,
+                Genre = st.Track.Genre,
+                Duration = st.Track.Duration,
+                TrackURL = st.Track.TrackURL,
+                CreatorId_FK = st.Track.CreatorId_FK,
+                ImageURL = st.Track.ImageURL
+            })
+            .ToList();
+
+        return trackDTOs;
+    }
+        
 
 public Task<bool> DeleteShowAsync(int showIdDTO)
     => throw new NotImplementedException();
