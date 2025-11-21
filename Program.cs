@@ -75,6 +75,7 @@ namespace Hyper_Radio_API
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("AllowFrontend");
 
             app.UseAuthorization();
 
