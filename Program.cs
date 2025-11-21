@@ -49,7 +49,7 @@ namespace Hyper_Radio_API
                   policy =>
                   {
                       policy
-                          .WithOrigins("https://localhost:7210",
+                          .WithOrigins("https://localhost:7110",
                                        "http://localhost:5122",
                                        "hyper-radio-streamer-gqeaffc3cucfhxb8.norwayeast-01.azurewebsites.net")
                           .AllowAnyHeader()
