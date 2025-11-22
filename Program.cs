@@ -1,7 +1,9 @@
 
 using Hyper_Radio_API.Data;
 using Hyper_Radio_API.Repositories;
+using Hyper_Radio_API.Repositories.CreatorRepositories;
 using Hyper_Radio_API.Repositories.TrackRepositories;
+using Hyper_Radio_API.Services.CreatorServices;
 using Hyper_Radio_API.Services.ShowServices;
 using Hyper_Radio_API.Services.TrackServices;
 using Hyper_Radio_API.Services.UploadServices;
@@ -27,6 +29,8 @@ namespace Hyper_Radio_API
             builder.Services.AddScoped<ITrackService, TrackService>();
             builder.Services.AddScoped<ITrackRepository, TrackRepository>();
             builder.Services.AddScoped<IShowService, ShowService>();
+            builder.Services.AddScoped<ICreatorService, CreatorService>();
+            builder.Services.AddScoped<ICreatorRepository, CreatorRepository>();
             builder.Services.AddScoped<IShowRepository, ShowRepository>();
 
             

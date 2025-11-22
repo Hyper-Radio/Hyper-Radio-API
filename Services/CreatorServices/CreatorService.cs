@@ -31,6 +31,7 @@ namespace Hyper_Radio_API.Services.CreatorServices
 
             return new CreatorDTO()
             {
+                Id = creator.Id,
                 Username = creator.Username,
                 Email = creator.Email,
                 Description = creator.Description,
@@ -44,6 +45,7 @@ namespace Hyper_Radio_API.Services.CreatorServices
                 Username = creator.Username,
                 Email = creator.Email,
                 Description = creator.Description,
+                PasswordHash = creator.PasswordHash,
                 ProfilePictureURL = creator.ProfilePictureURL
             };
 
