@@ -21,7 +21,7 @@ public class ShowRepository : IShowRepository
         return shows;
     }
 
-    public async Task<Show> GetShowByIdAsync(int showId)
+    public async Task<Show?> GetShowByIdAsync(int showId)
     {
         var show = await _context.Shows.FirstOrDefaultAsync(s => s.Id == showId);
         return show;
@@ -52,5 +52,15 @@ public class ShowRepository : IShowRepository
             .ThenInclude(st => st.Track)
             .FirstOrDefaultAsync(s => s.Id == id);
     }
-    
+
+    public async Task<List<Track>> GetTracksByShowIdAsync(int showId)
+    {
+        var tracks = await _context.ShowTracks.Where(st => st.ShowId == showId)
+            .Include(st => st.Track)
+            .Select(st => st.Track)
+            .ToListAsync();
+        return tracks;
+    }
+
+
 }

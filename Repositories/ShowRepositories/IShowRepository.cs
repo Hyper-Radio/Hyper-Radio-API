@@ -9,7 +9,7 @@ public interface IShowRepository
     Task<List<Show>> GetAllShowsAsync();
 
     //GET SHOW BY ID
-    Task<Show> GetShowByIdAsync(int showId);
+    Task<Show?> GetShowByIdAsync(int showId);
     
     //CREATE SHOW
     Task<int> CreateShowAsync(Show show);
@@ -23,6 +23,6 @@ public interface IShowRepository
     
     Task<Show> GetShowWithTracksAsync(int id);
 
-    
-    
+    Task<List<Track>> GetTracksByShowIdAsync(int showId);
+
 }
