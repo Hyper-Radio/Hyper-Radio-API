@@ -1,15 +1,13 @@
 
-using System.Text;
 using Hyper_Radio_API.Data;
 using Hyper_Radio_API.Repositories;
+using Hyper_Radio_API.Repositories.CreatorRepositories;
 using Hyper_Radio_API.Repositories.TrackRepositories;
+using Hyper_Radio_API.Services.CreatorServices;
 using Hyper_Radio_API.Services.ShowServices;
-using Hyper_Radio_API.Services.TokenServices;
 using Hyper_Radio_API.Services.TrackServices;
 using Hyper_Radio_API.Services.UploadServices;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Hyper_Radio_API
 {
@@ -18,8 +16,6 @@ namespace Hyper_Radio_API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            //This is a dynamic switch to change the connection string depending on lacal variable
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -33,10 +29,11 @@ namespace Hyper_Radio_API
             builder.Services.AddScoped<ITrackService, TrackService>();
             builder.Services.AddScoped<ITrackRepository, TrackRepository>();
             builder.Services.AddScoped<IShowService, ShowService>();
+            builder.Services.AddScoped<ICreatorService, CreatorService>();
+            builder.Services.AddScoped<ICreatorRepository, CreatorRepository>();
             builder.Services.AddScoped<IShowRepository, ShowRepository>();
-            builder.Services.AddScoped<ITokenService, TokenService>();
 
-
+            
             builder.Services.Configure<AzureBlobSettings>(
                 builder.Configuration.GetSection("AzureBlob"));
             builder.Services.AddSingleton<AzureBlobService>();
@@ -52,28 +49,21 @@ namespace Hyper_Radio_API
                         .AllowAnyMethod()
                         .AllowAnyHeader();
                 });
+                options.AddPolicy("AllowFrontend",
+                  policy =>
+                  {
+                      policy
+                          .WithOrigins("https://localhost:7110",
+                                       "http://localhost:5122",
+                                       "hyper-radio-streamer-gqeaffc3cucfhxb8.norwayeast-01.azurewebsites.net")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials(); // optional, if cookies or auth are used
+                  });
             });
 
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                ValidAudience = builder.Configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-            };
-            });
-            builder.Services.AddAuthorization();
+
             var app = builder.Build();
-            
-            // Enable CORS globally
-            app.UseCors("AllowSwaggerUI");
-
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -82,13 +72,29 @@ namespace Hyper_Radio_API
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            if (app.Environment.IsProduction())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
-            app.UseAuthentication();
+            app.UseHttpsRedirection();
+            app.UseCors("AllowFrontend");
+
             app.UseAuthorization();
 
 
             app.MapControllers();
+
+            /*
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<HyperRadioDbContext>();
+                SeedData.InitializeDB(context);
+            }
+            
+            */
             
             app.Run();
         }

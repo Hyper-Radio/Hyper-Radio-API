@@ -23,7 +23,7 @@ public class ShowsController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<ReadShowDTO>> GetShowById(int id)
+    public async Task<ActionResult<ShowWithTracksDTO>> GetShowById(int id)
     {
         var show = await _service.GetShowByIdAsync(id);
         if (show == null)
