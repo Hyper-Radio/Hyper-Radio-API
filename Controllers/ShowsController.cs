@@ -64,13 +64,13 @@ public class ShowsController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet("{id:int}/tracks")]
+    //[HttpGet("{id:int}/tracks")]
 
-    public async Task<ActionResult<ShowWithTrackDTO>> GetShowWithTracks(int id)
-    {
-        var showWithTracks = await _service.GetShowWithTracksAsync(id);
-        if (showWithTracks == null)
-            return NotFound();
-        return Ok(showWithTracks);
-    }
+    //public async Task<ActionResult<ShowWithTrackDTO>> GetShowWithTracks(int id)
+    //{
+    //    var showWithTracks = await _service.GetShowWithTracksAsync(id);
+    //    if (showWithTracks == null)
+    //        return NotFound();
+    //    return Ok(showWithTracks);
+    //}
 }
